@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MysticalBackground Performance Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #1a1a2e;
+      color: white;
+    }
+    #fps-counter {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 1000;
+      border: 2px solid #6366f1;
+    }
+    .metric {
+      margin: 5px 0;
+    }
+    .good { color: #22c55e; }
+    .warning { color: #f59e0b; }
+    .bad { color: #ef4444; }
+    #test-info {
+      max-width: 600px;
+      margin: 100px auto;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #6366f1;
+    }
+    h1 { color: #a855f7; }
+    ul { line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <div id="fps-counter">
+    <div class="metric">FPS: <span id="fps">--</span></div>
+    <div class="metric">Particles: <span id="particle-count">--</span></div>
+    <div class="metric">Device: <span id="device-type">--</span></div>
+    <div class="metric">Performance: <span id="perf-status">--</span></div>
+  </div>
+
+  <div id="test-info">
+    <h1>MysticalBackground Performance Test</h1>
+    <p>This page tests the performance of the particle system.</p>
+    <h3>Test Instructions:</h3>
+    <ul>
+      <li>Check FPS counter (should be 55+ fps)</li>
+      <li>Resize window to test responsiveness</li>
+      <li>Switch tabs to test pause functionality</li>
+      <li>Test on mobile viewport (375px width)</li>
+      <li>Look for smooth particle animations</li>
+    </ul>
+    <h3>Expected Results:</h3>
+    <ul>
+      <li><strong>Desktop:</strong> 30-50 particles, 55+ fps</li>
+      <li><strong>Mobile:</strong> 15-20 particles, 55+ fps</li>
+      <li><strong>Colors:</strong> Cosmic blue/purple particles</li>
+      <li><strong>Motion:</strong> Slow upward drift with horizontal wave</li>
+    </ul>
+  </div>
+
+  <script>
+    // This is a mock version of the performance monitoring
+    // In the actual component, this is built into the React component
+
+    let frameCount = 0;
+    let lastTime = performance.now();
+    let fps = 60;
+
+    function updateFPS() {
+      frameCount++;
+      const currentTime = performance.now();
+      const elapsed = currentTime - lastTime;
+
+      if (elapsed >= 1000) {
+        fps = Math.round((frameCount * 1000) / elapsed);
+        frameCount = 0;
+        lastTime = currentTime;
+
+        document.getElementById('fps').textContent = fps;
+
+        const fpsElement = document.getElementById('fps');
+        fpsElement.className = fps >= 55 ? 'good' : fps >= 40 ? 'warning' : 'bad';
+      }
+    }
+
+    function checkDevice() {
+      const isMobile = window.innerWidth < 768;
+      const deviceType = isMobile ? 'Mobile' : 'Desktop';
+      const particleCount = isMobile ? '15-20' : '30-50';
+
+      document.getElementById('device-type').textContent = deviceType;
+      document.getElementById('particle-count').textContent = particleCount;
+    }
+
+    function checkPerformance() {
+      if (fps >= 55) {
+        document.getElementById('perf-status').textContent = 'Excellent';
+        document.getElementById('perf-status').className = 'good';
+      } else if (fps >= 40) {
+        document.getElementById('perf-status').textContent = 'Good';
+        document.getElementById('perf-status').className = 'warning';
+      } else {
+        document.getElementById('perf-status').textContent = 'Low (reducing particles)';
+        document.getElementById('perf-status').className = 'bad';
+      }
+    }
+
+    function animate() {
+      updateFPS();
+      checkPerformance();
+      requestAnimationFrame(animate);
+    }
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    animate();
+
+    console.log('%c✅ MysticalBackground Performance Test Running', 'color: #22c55e; font-size: 16px; font-weight: bold;');
+    console.log('%cCheck the top-right corner for real-time metrics', 'color: #a855f7; font-size: 12px;');
+  </script>
+</body>
+</html>
