@@ -44,6 +44,8 @@ export default [
         window: 'readonly',
         document: 'readonly',
         navigator: 'readonly',
+        localStorage: 'readonly',
+        sessionStorage: 'readonly',
         HTMLCanvasElement: 'readonly',
         CanvasRenderingContext2D: 'readonly',
         requestAnimationFrame: 'readonly',

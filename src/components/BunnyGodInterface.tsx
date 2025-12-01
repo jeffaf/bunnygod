@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import QuestionInput from './QuestionInput';
 import AnswerDisplay from './AnswerDisplay';
 import LoadingOracle from './LoadingOracle';
+import QuestionHistory from './phase2/QuestionHistory';
 
 interface Answer {
   text: string;
@@ -16,11 +17,19 @@ export default function BunnyGodInterface() {
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<string>('');
+  const [lastAskedQuestion, setLastAskedQuestion] = useState<string>('');
 
-  const handleQuestionSubmit = async (question: string) => {
+  const handleQuestionSubmit = useCallback(async (question: string) => {
     setIsLoading(true);
     setError(null);
     setAnswer(null);
+    setLastAskedQuestion(question);
+
+    // Add to history
+    if (typeof window !== 'undefined' && (window as any).__bunnyGodAddToHistory) {
+      (window as any).__bunnyGodAddToHistory(question);
+    }
 
     try {
       // Determine API endpoint
@@ -56,11 +65,44 @@ export default function BunnyGodInterface() {
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  // Check for URL query parameter on component mount (shared questions)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sharedQuestion = urlParams.get('q');
+
+      if (sharedQuestion) {
+        // Auto-submit the shared question
+        handleQuestionSubmit(sharedQuestion);
+
+        // Clean up URL without page reload
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+  }, [handleQuestionSubmit]);
+
+  // Handle question selection from history
+  const handleHistoryQuestionSelect = (question: string) => {
+    setCurrentQuestion(question);
+    // Trigger re-ask after a short delay to allow state to update
+    setTimeout(() => {
+      handleQuestionSubmit(question);
+    }, 100);
   };
 
   return (
     <div className="w-full px-4">
-      <QuestionInput onSubmit={handleQuestionSubmit} isLoading={isLoading} />
+      {/* Question History Component */}
+      <QuestionHistory onQuestionSelect={handleHistoryQuestionSelect} />
+
+      <QuestionInput
+        onSubmit={handleQuestionSubmit}
+        isLoading={isLoading}
+        initialValue={currentQuestion}
+        key={currentQuestion} // Force re-render when question changes
+      />
 
       {isLoading && <LoadingOracle />}
 
@@ -71,7 +113,7 @@ export default function BunnyGodInterface() {
       )}
 
       {answer && !isLoading && (
-        <AnswerDisplay answer={answer.text} sources={answer.sources} />
+        <AnswerDisplay answer={answer.text} question={lastAskedQuestion} sources={answer.sources} />
       )}
     </div>
   );

@@ -1,5 +1,9 @@
+import ShareButtons from './phase2/ShareButtons';
+import FeedbackButtons from './phase2/FeedbackButtons';
+
 interface AnswerDisplayProps {
   answer: string;
+  question: string;
   sources?: Array<{
     title: string;
     authors: string;
@@ -7,7 +11,7 @@ interface AnswerDisplayProps {
   }>;
 }
 
-export default function AnswerDisplay({ answer, sources }: AnswerDisplayProps) {
+export default function AnswerDisplay({ answer, question, sources }: AnswerDisplayProps) {
   return (
     <div className="w-full max-w-4xl mx-auto mt-12 animate-in fade-in duration-500">
       <div className="bg-cosmic-900/30 backdrop-blur-md border border-cosmic-500/30 rounded-2xl p-8 shadow-2xl shadow-mystic-500/20">
@@ -30,6 +34,12 @@ export default function AnswerDisplay({ answer, sources }: AnswerDisplayProps) {
             {answer}
           </p>
         </div>
+
+        {/* Share Buttons */}
+        <ShareButtons question={question} answer={answer} />
+
+        {/* Feedback Buttons */}
+        <FeedbackButtons question={question} />
 
         {sources && sources.length > 0 && (
           <div className="mt-8 pt-6 border-t border-cosmic-500/30">

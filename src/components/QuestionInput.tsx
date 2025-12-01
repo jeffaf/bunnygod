@@ -3,10 +3,11 @@ import { useState } from 'react';
 interface QuestionInputProps {
   onSubmit: (question: string) => void;
   isLoading: boolean;
+  initialValue?: string;
 }
 
-export default function QuestionInput({ onSubmit, isLoading }: QuestionInputProps) {
-  const [question, setQuestion] = useState('');
+export default function QuestionInput({ onSubmit, isLoading, initialValue = '' }: QuestionInputProps) {
+  const [question, setQuestion] = useState(initialValue);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -8,6 +8,7 @@
 export interface Env {
   AI: any; // Cloudflare Workers AI binding
   CACHE: KVNamespace; // KV namespace for caching
+  FEEDBACK: KVNamespace; // KV namespace for user feedback
   ANALYTICS?: any; // Analytics Engine binding (optional - requires dashboard setup)
   ENVIRONMENT: string;
 }
@@ -24,6 +25,126 @@ interface AnswerResponse {
     url: string;
   }>;
   cached: boolean;
+}
+
+interface FeedbackRequest {
+  questionHash: string;
+  rating: 'helpful' | 'not-helpful';
+  timestamp: number;
+  sessionId?: string;
+}
+
+interface FeedbackData {
+  questionHash: string;
+  rating: 'helpful' | 'not-helpful';
+  timestamp: number;
+  sessionId?: string;
+  userAgent?: string;
+  country?: string;
+}
+
+/**
+ * Handle feedback submission
+ */
+async function handleFeedback(
+  request: Request,
+  env: Env,
+  corsHeaders: Record<string, string>
+): Promise<Response> {
+  try {
+    // Parse request body
+    const body = await request.json() as FeedbackRequest;
+
+    // Validate request
+    if (!body.questionHash || typeof body.questionHash !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Invalid questionHash' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!body.rating || !['helpful', 'not-helpful'].includes(body.rating)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid rating. Must be "helpful" or "not-helpful"' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!body.timestamp || typeof body.timestamp !== 'number') {
+      return new Response(
+        JSON.stringify({ error: 'Invalid timestamp' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check for FEEDBACK KV namespace
+    if (!env.FEEDBACK) {
+      return new Response(
+        JSON.stringify({ error: 'Feedback storage not configured' }),
+        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Rate limiting: Check if this session already rated this question
+    const rateLimitKey = `ratelimit:${body.sessionId}:${body.questionHash}`;
+    const existingRating = await env.FEEDBACK.get(rateLimitKey);
+
+    if (existingRating) {
+      return new Response(
+        JSON.stringify({ error: 'Already rated this question', rating: existingRating }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Prepare feedback data with metadata
+    const feedbackData: FeedbackData = {
+      questionHash: body.questionHash,
+      rating: body.rating,
+      timestamp: body.timestamp,
+      sessionId: body.sessionId,
+      userAgent: request.headers.get('user-agent') || undefined,
+      country: (request as any).cf?.country || undefined,
+    };
+
+    // Store feedback in KV
+    const feedbackKey = `feedback:${body.questionHash}:${body.timestamp}`;
+    await env.FEEDBACK.put(feedbackKey, JSON.stringify(feedbackData), {
+      expirationTtl: 2592000, // 30 days
+    });
+
+    // Store rate limit (shorter TTL - 7 days)
+    if (body.sessionId) {
+      await env.FEEDBACK.put(rateLimitKey, body.rating, {
+        expirationTtl: 604800, // 7 days
+      });
+    }
+
+    // Track analytics if available
+    if (env.ANALYTICS) {
+      const { trackEvent } = await import('./analytics');
+      trackEvent(env.ANALYTICS, 'feedback_submitted', {
+        question_length: 0,
+        response_time_ms: 0,
+        sources_count: body.rating === 'helpful' ? 1 : 0,
+      });
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, message: 'Feedback recorded' }),
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    console.error('Error processing feedback:', error);
+
+    return new Response(
+      JSON.stringify({
+        error: 'Internal server error',
+        message: env.ENVIRONMENT === 'development' ? (error as Error).message : undefined
+      }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
 }
 
 export default {
@@ -48,6 +169,15 @@ export default {
       );
     }
 
+    // Route handling
+    const url = new URL(request.url);
+
+    // Feedback endpoint
+    if (url.pathname === '/api/feedback') {
+      return handleFeedback(request, env, corsHeaders);
+    }
+
+    // Question answering endpoint (default)
     const startTime = Date.now();
 
     try {
