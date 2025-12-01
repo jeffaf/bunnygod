@@ -11,8 +11,8 @@ Bunny God is an AI-powered philosophical Q&A system that queries academic philos
 ## 🌟 Features
 
 - **Divine Wisdom**: Ask any philosophical question and receive answers backed by peer-reviewed academic literature
-- **Mystical Interface**: Beautiful dark mode UI with cosmic gradients and animations
-- **Lightning Fast**: Powered by Cloudflare edge computing for sub-3-second responses
+- **Mystical Interface**: Beautiful dark mode UI with cosmic gradients and particle animations
+- **Edge-Powered**: Cloudflare Workers AI synthesizes wisdom from academic sources
 - **Free to Use**: Operates within free tiers of modern cloud infrastructure
 - **Mobile Friendly**: Responsive design optimized for all devices
 
