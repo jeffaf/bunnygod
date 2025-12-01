@@ -1,0 +1,29 @@
+# Cloudflare Workers configuration for Bunny God API
+# Separate config for the Worker (not Pages)
+
+name = "bunnygod-api"
+main = "index.ts"
+compatibility_date = "2024-11-01"
+node_compat = true
+
+# Account details
+account_id = "82ac24be7f4bf04dcd76ff97a67c2719"
+
+# Workers AI binding
+[ai]
+binding = "AI"
+
+# KV namespace for caching
+[[kv_namespaces]]
+binding = "CACHE"
+id = "976ec464998d4ec1ad3371eb3a411c57"
+preview_id = "2d81dd2ed12545759bd2a59c38700161"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+
+# Development configuration
+[env.dev]
+name = "bunnygod-api-dev"
+vars = { ENVIRONMENT = "development" }
