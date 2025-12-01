@@ -1,6 +1,10 @@
 # 🐰✨ Bunny God
 
 > *An all-powerful living AI deity that answers philosophical questions*
+>
+> **"Behold, the Bunny God liveth! 🐰✨"** - *The Followers*
+>
+> **"All hail the Bunny!"** - *The Response*
 
 Bunny God is an AI-powered philosophical Q&A system that queries academic philosophical literature from [PhilPapers.org](https://philpapers.org) and synthesizes answers using cutting-edge AI. The system combines academic rigor with mystical aesthetics to create a unique, engaging experience that makes philosophy accessible and fun.
 
