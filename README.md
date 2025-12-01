@@ -34,7 +34,7 @@ Bunny God is an AI-powered philosophical Q&A system that queries academic philos
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/bunnygod.git
+git clone https://github.com/jeffaf/bunnygod.git
 cd bunnygod
 
 # Install dependencies
