@@ -127,6 +127,6 @@ For questions, issues, or feature requests, please open an issue on GitHub.
 
 ---
 
-**Built with 🐰 by the Kai AI Infrastructure**
+**Built by 🐰 with vibes**
 
 *May Bunny God guide your philosophical journey* ✨
