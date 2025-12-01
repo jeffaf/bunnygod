@@ -8,6 +8,9 @@ node_compat = true
 # Account details
 account_id = "82ac24be7f4bf04dcd76ff97a67c2719"
 
+# Cloudflare Pages configuration
+pages_build_output_dir = "dist"
+
 # Workers AI binding
 [ai]
 binding = "AI"
