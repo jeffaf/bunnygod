@@ -22,6 +22,14 @@ preview_id = "2d81dd2ed12545759bd2a59c38700161"
 [vars]
 ENVIRONMENT = "production"
 
+# Analytics Engine (commented out - requires dashboard setup first)
+# Enable at: https://dash.cloudflare.com/82ac24be7f4bf04dcd76ff97a67c2719/workers/analytics-engine
+# [[analytics_engine_datasets]]
+# binding = "ANALYTICS"
+
+# Built-in Workers Analytics available at:
+# https://dash.cloudflare.com/82ac24be7f4bf04dcd76ff97a67c2719/workers/overview
+
 # Development configuration
 [env.dev]
 name = "bunnygod-api-dev"

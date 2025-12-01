@@ -8,6 +8,7 @@
 export interface Env {
   AI: any; // Cloudflare Workers AI binding
   CACHE: KVNamespace; // KV namespace for caching
+  ANALYTICS?: any; // Analytics Engine binding (optional - requires dashboard setup)
   ENVIRONMENT: string;
 }
 
@@ -46,6 +47,8 @@ export default {
         { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    const startTime = Date.now();
 
     try {
       // Parse request body
@@ -115,6 +118,17 @@ export default {
       // Cache the response for 24 hours
       await env.CACHE?.put(cacheKey, JSON.stringify(response), { expirationTtl: 86400 });
 
+      // Track analytics
+      const { trackQuestion } = await import('./analytics');
+      const responseTime = Date.now() - startTime;
+      trackQuestion(
+        env.ANALYTICS,
+        sanitizedQuestion.length,
+        responseTime,
+        response.sources.length,
+        false
+      );
+
       return new Response(
         JSON.stringify(response),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -122,6 +136,10 @@ export default {
 
     } catch (error) {
       console.error('Error processing question:', error);
+
+      // Track error
+      const { trackError } = await import('./analytics');
+      trackError(env.ANALYTICS, (error as Error).message);
 
       return new Response(
         JSON.stringify({
