@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-cosmic: 99 102 241;
+    --color-mystic: 168 85 247;
+    --color-divine: 244 63 94;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-cosmic-950 via-mystic-950 to-cosmic-900;
+    @apply text-white antialiased;
+    @apply min-h-screen;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-cosmic-400 via-mystic-400 to-divine-400;
+    @apply bg-clip-text text-transparent;
+  }
+
+  .mystical-glow {
+    @apply shadow-lg shadow-mystic-500/50;
+  }
+
+  .cosmic-border {
+    @apply border border-cosmic-500/30;
+    @apply rounded-lg;
+  }
+
+  .divine-button {
+    @apply px-6 py-3 rounded-lg;
+    @apply bg-gradient-to-r from-cosmic-600 to-mystic-600;
+    @apply hover:from-cosmic-500 hover:to-mystic-500;
+    @apply transition-all duration-300;
+    @apply font-semibold text-white;
+    @apply shadow-lg shadow-cosmic-500/50;
+    @apply hover:shadow-xl hover:shadow-mystic-500/50;
+    @apply transform hover:-translate-y-0.5;
+  }
+}
+
+@layer utilities {
+  .animate-gradient {
+    background-size: 300% 300%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.5),
+                 0 0 40px rgba(99, 102, 241, 0.3);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(49 46 129 / 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, rgb(99 102 241), rgb(168 85 247));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, rgb(129 140 248), rgb(192 132 252));
+}

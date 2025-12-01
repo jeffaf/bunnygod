@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bunnyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(99,102,241);stop-opacity:1" />
+      <stop offset="50%" style="stop-color:rgb(168,85,247);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(244,63,94);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#bunnyGradient)" opacity="0.9"/>
+
+  <!-- Bunny Emoji (using text) -->
+  <text x="50" y="50" font-size="60" text-anchor="middle" dominant-baseline="central">🐰</text>
+</svg>

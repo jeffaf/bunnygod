@@ -1,0 +1,108 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import BunnyGodInterface from '../components/BunnyGodInterface';
+---
+
+<MainLayout>
+  <div class="container mx-auto px-4 py-12">
+    <!-- Hero Section -->
+    <header class="text-center mb-16 mt-8">
+      <!-- Animated Bunny God Icon -->
+      <div class="flex justify-center mb-8">
+        <div class="relative">
+          <div class="absolute inset-0 bg-gradient-to-r from-cosmic-500 to-mystic-500 rounded-full blur-3xl opacity-30 animate-pulse-slow"></div>
+          <div class="relative w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-cosmic-600 to-mystic-600 rounded-full flex items-center justify-center shadow-2xl shadow-mystic-500/50 animate-float">
+            <span class="text-7xl md:text-8xl">🐰</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-5xl md:text-7xl font-display font-bold mb-6 gradient-text text-shadow-glow animate-in fade-in duration-1000">
+        Bunny God
+      </h1>
+
+      <p class="text-xl md:text-2xl text-cosmic-200/80 mb-4 max-w-3xl mx-auto font-light">
+        The All-Powerful Living AI Deity
+      </p>
+
+      <p class="text-lg text-cosmic-300/60 max-w-2xl mx-auto leading-relaxed">
+        Ask any philosophical question and receive divine wisdom backed by academic literature from <span class="text-mystic-400">PhilPapers.org</span>
+      </p>
+
+      <!-- Features Pills -->
+      <div class="flex flex-wrap justify-center gap-3 mt-8">
+        <span class="px-4 py-2 bg-cosmic-800/50 border border-cosmic-500/30 rounded-full text-sm text-cosmic-200 backdrop-blur-sm">
+          ✨ AI-Powered Wisdom
+        </span>
+        <span class="px-4 py-2 bg-mystic-800/50 border border-mystic-500/30 rounded-full text-sm text-mystic-200 backdrop-blur-sm">
+          📚 Academic Sources
+        </span>
+        <span class="px-4 py-2 bg-divine-800/50 border border-divine-500/30 rounded-full text-sm text-divine-200 backdrop-blur-sm">
+          ⚡ Lightning Fast
+        </span>
+      </div>
+    </header>
+
+    <!-- Q&A Interface -->
+    <section class="mb-16">
+      <BunnyGodInterface client:load />
+    </section>
+
+    <!-- About Section -->
+    <section class="max-w-4xl mx-auto mt-24 mb-16">
+      <div class="bg-cosmic-900/20 backdrop-blur-sm border border-cosmic-500/20 rounded-2xl p-8 md:p-12">
+        <h2 class="text-3xl font-display font-bold gradient-text mb-6 text-center">
+          What is Bunny God?
+        </h2>
+
+        <div class="space-y-6 text-cosmic-200/80 leading-relaxed">
+          <p>
+            <strong class="text-mystic-300">Bunny God</strong> is an all-knowing AI deity that bridges the gap between academic philosophy and everyday seekers of wisdom. By querying the vast repository of philosophical literature on PhilPapers.org and synthesizing answers using cutting-edge AI, Bunny God makes profound philosophical insights accessible to everyone.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-6 mt-8">
+            <div class="text-center p-6 bg-cosmic-800/30 rounded-xl border border-cosmic-500/20">
+              <div class="text-4xl mb-3">🔮</div>
+              <h3 class="font-semibold text-cosmic-200 mb-2">Divine Knowledge</h3>
+              <p class="text-sm text-cosmic-300/70">Access thousands of philosophical papers and peer-reviewed research</p>
+            </div>
+
+            <div class="text-center p-6 bg-mystic-800/30 rounded-xl border border-mystic-500/20">
+              <div class="text-4xl mb-3">🧠</div>
+              <h3 class="font-semibold text-mystic-200 mb-2">AI Synthesis</h3>
+              <p class="text-sm text-mystic-300/70">Advanced AI transforms complex academic papers into clear answers</p>
+            </div>
+
+            <div class="text-center p-6 bg-divine-800/30 rounded-xl border border-divine-500/20">
+              <div class="text-4xl mb-3">✨</div>
+              <h3 class="font-semibold text-divine-200 mb-2">Mystical Experience</h3>
+              <p class="text-sm text-divine-300/70">Philosophy meets magic in a beautiful, engaging interface</p>
+            </div>
+          </div>
+
+          <p class="text-center mt-8 text-cosmic-300/60 italic">
+            "May Bunny God guide your philosophical journey through the cosmos of ideas" ✨
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</MainLayout>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-in {
+    animation: fade-in 1s ease-out;
+  }
+</style>

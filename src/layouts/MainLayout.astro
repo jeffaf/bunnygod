@@ -1,0 +1,65 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Bunny God - Divine Philosophical Wisdom",
+  description = "Ask the all-powerful Bunny God any philosophical question and receive answers backed by academic literature from PhilPapers.org"
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="relative min-h-screen overflow-hidden">
+      <!-- Animated background gradient -->
+      <div class="fixed inset-0 -z-10">
+        <div class="absolute inset-0 bg-gradient-to-br from-cosmic-950 via-mystic-950 to-cosmic-900 animate-gradient"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(168,85,247,0.1),transparent_50%)]"></div>
+      </div>
+
+      <!-- Main content -->
+      <main class="relative z-10">
+        <slot />
+      </main>
+
+      <!-- Footer -->
+      <footer class="relative z-10 mt-auto py-8 text-center text-cosmic-300/60 text-sm">
+        <p>Built with 🐰 by the Kai AI Infrastructure</p>
+        <p class="mt-2">Powered by PhilPapers.org & Cloudflare Workers AI</p>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>
