@@ -23,20 +23,32 @@ export default function BunnyGodInterface() {
     setAnswer(null);
 
     try {
-      // TODO: Replace with actual API call when worker is ready
-      // Simulate API call for now
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Determine API endpoint
+      const apiUrl = import.meta.env.PUBLIC_API_URL ||
+                     'https://bunnygod-api.jeffbarron.workers.dev';
 
-      // Mock response
+      // Call Bunny God API
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({})) as any;
+        throw new Error(errorData.error || `API error: ${response.status}`);
+      }
+
+      const data = await response.json() as {
+        answer: string;
+        sources?: Array<{ title: string; authors: string; url: string; }>;
+      };
+
       setAnswer({
-        text: `Behold, mortal! You have asked about "${question}". While the divine Bunny God API is still being channeled into existence, know that your question has been received by the cosmic consciousness. Soon, I shall query the sacred texts of PhilPapers.org and return with wisdom synthesized by celestial AI.\n\nFor now, this mystical interface stands ready to receive your philosophical inquiries. The full divine power shall be unleashed once the Cloudflare Workers are deployed to the edge of reality itself.`,
-        sources: [
-          {
-            title: "The Nature of Philosophical Inquiry",
-            authors: "Various Philosophers",
-            url: "https://philpapers.org",
-          },
-        ],
+        text: data.answer,
+        sources: data.sources || [],
       });
     } catch (err) {
       setError('The divine channels are temporarily disrupted. Please try again.');

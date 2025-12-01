@@ -1,0 +1,5 @@
+# Development environment variables for Cloudflare Workers
+# Copy this to .dev.vars for local development
+
+# These are automatically injected during `wrangler dev`
+ENVIRONMENT=development
