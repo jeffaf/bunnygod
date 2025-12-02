@@ -109,7 +109,7 @@ export default function ShareButtons({ question, answer }: ShareButtonsProps) {
         {/* Copy Answer Button */}
         <button
           onClick={copyAnswer}
-          className="group relative flex items-center gap-2 px-4 py-2 bg-cosmic-800/50 hover:bg-cosmic-700/50 border border-cosmic-500/30 hover:border-cosmic-400/50 rounded-lg text-cosmic-200 hover:text-cosmic-100 transition-all duration-200 shadow-lg shadow-cosmic-900/30 hover:shadow-cosmic-500/20"
+          className="group relative flex items-center gap-2 px-6 py-3 bg-cosmic-800/50 hover:bg-cosmic-700/50 border border-cosmic-500/30 hover:border-cosmic-400/50 rounded-lg text-cosmic-200 hover:text-cosmic-100 transition-all duration-200 shadow-lg shadow-cosmic-900/30 hover:shadow-cosmic-500/20"
           aria-label="Copy answer to clipboard"
         >
           {copyStatus === 'answer' ? (
@@ -132,7 +132,7 @@ export default function ShareButtons({ question, answer }: ShareButtonsProps) {
         {/* Copy Link Button */}
         <button
           onClick={copyLink}
-          className="group relative flex items-center gap-2 px-4 py-2 bg-mystic-800/50 hover:bg-mystic-700/50 border border-mystic-500/30 hover:border-mystic-400/50 rounded-lg text-mystic-200 hover:text-mystic-100 transition-all duration-200 shadow-lg shadow-mystic-900/30 hover:shadow-mystic-500/20"
+          className="group relative flex items-center gap-2 px-6 py-3 bg-mystic-800/50 hover:bg-mystic-700/50 border border-mystic-500/30 hover:border-mystic-400/50 rounded-lg text-mystic-200 hover:text-mystic-100 transition-all duration-200 shadow-lg shadow-mystic-900/30 hover:shadow-mystic-500/20"
           aria-label="Copy shareable link"
         >
           {copyStatus === 'link' ? (
@@ -155,7 +155,7 @@ export default function ShareButtons({ question, answer }: ShareButtonsProps) {
         {/* Twitter Share Button */}
         <button
           onClick={shareToTwitter}
-          className="group relative flex items-center gap-2 px-4 py-2 bg-[#1DA1F2]/20 hover:bg-[#1DA1F2]/30 border border-[#1DA1F2]/30 hover:border-[#1DA1F2]/50 rounded-lg text-[#1DA1F2] hover:text-white transition-all duration-200 shadow-lg shadow-[#1DA1F2]/10 hover:shadow-[#1DA1F2]/20"
+          className="group relative flex items-center gap-2 px-6 py-3 bg-[#1DA1F2]/20 hover:bg-[#1DA1F2]/30 border border-[#1DA1F2]/30 hover:border-[#1DA1F2]/50 rounded-lg text-[#1DA1F2] hover:text-white transition-all duration-200 shadow-lg shadow-[#1DA1F2]/10 hover:shadow-[#1DA1F2]/20"
           aria-label="Share on Twitter"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -167,7 +167,7 @@ export default function ShareButtons({ question, answer }: ShareButtonsProps) {
         {/* Reddit Share Button */}
         <button
           onClick={shareToReddit}
-          className="group relative flex items-center gap-2 px-4 py-2 bg-[#FF4500]/20 hover:bg-[#FF4500]/30 border border-[#FF4500]/30 hover:border-[#FF4500]/50 rounded-lg text-[#FF4500] hover:text-white transition-all duration-200 shadow-lg shadow-[#FF4500]/10 hover:shadow-[#FF4500]/20"
+          className="group relative flex items-center gap-2 px-6 py-3 bg-[#FF4500]/20 hover:bg-[#FF4500]/30 border border-[#FF4500]/30 hover:border-[#FF4500]/50 rounded-lg text-[#FF4500] hover:text-white transition-all duration-200 shadow-lg shadow-[#FF4500]/10 hover:shadow-[#FF4500]/20"
           aria-label="Share on Reddit"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

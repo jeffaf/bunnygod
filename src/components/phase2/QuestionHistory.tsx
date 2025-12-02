@@ -152,7 +152,7 @@ export default function QuestionHistory({ onQuestionSelect }: QuestionHistoryPro
               </h3>
               <button
                 onClick={clearHistory}
-                className="text-xs px-3 py-1 rounded-lg
+                className="text-sm px-4 py-2.5 rounded-lg
                          bg-divine-800/40 border border-divine-500/30
                          text-divine-200 hover:bg-divine-700/50 hover:border-divine-400/50
                          transition-all duration-200

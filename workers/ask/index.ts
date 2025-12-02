@@ -207,8 +207,12 @@ export default {
         );
       }
 
+      // Normalize question for cache key: lowercase and collapse multiple spaces
+      // This ensures "What is love?" and "what is love?" hit the same cache entry
+      const normalizedForCache = question.toLowerCase().replace(/\s+/g, ' ');
+
       // Check cache first
-      const cacheKey = `answer:${hashString(question)}`;
+      const cacheKey = `answer:${hashString(normalizedForCache)}`;
       const cached = await env.CACHE?.get(cacheKey, 'json');
 
       if (cached) {

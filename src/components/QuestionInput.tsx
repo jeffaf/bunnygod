@@ -24,7 +24,7 @@ export default function QuestionInput({ onSubmit, isLoading, initialValue = '' }
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask Bunny God a philosophical question..."
           className="w-full px-6 py-4 bg-cosmic-900/50 border-2 border-cosmic-500/30 rounded-2xl
-                     text-white placeholder-cosmic-300/50
+                     text-white placeholder-cosmic-200/80
                      focus:outline-none focus:border-mystic-500/50 focus:ring-2 focus:ring-mystic-500/30
                      transition-all duration-300 resize-none
                      backdrop-blur-sm shadow-lg shadow-cosmic-500/20
@@ -62,7 +62,7 @@ export default function QuestionInput({ onSubmit, isLoading, initialValue = '' }
         </button>
       </div>
 
-      <p className="mt-4 text-center text-cosmic-300/60 text-sm">
+      <p className="mt-4 text-center text-cosmic-200 text-sm">
         Ask anything about philosophy, ethics, metaphysics, epistemology, and more
       </p>
     </form>

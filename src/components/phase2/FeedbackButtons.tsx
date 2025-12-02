@@ -12,18 +12,27 @@ export default function FeedbackButtons({ question }: FeedbackButtonsProps) {
 
   // Check localStorage for existing feedback on mount
   useEffect(() => {
-    const questionHash = hashQuestion(question);
-    const stored = localStorage.getItem(`feedback:${questionHash}`);
-    if (stored) {
-      setSelectedRating(stored as 'helpful' | 'not-helpful');
+    try {
+      const questionHash = hashQuestion(question);
+      const stored = localStorage.getItem(`feedback:${questionHash}`);
+      if (stored) {
+        setSelectedRating(stored as 'helpful' | 'not-helpful');
+      }
+    } catch (error) {
+      console.warn('localStorage not available for feedback retrieval:', error);
+      // Silently fail - feedback persistence is not critical
     }
   }, [question]);
 
   // Simple hash function for client-side question identification
+  // MUST match backend normalization: lowercase and collapse multiple spaces
   const hashQuestion = (text: string): string => {
+    // Normalize the same way as backend cache key
+    const normalized = text.trim().toLowerCase().replace(/\s+/g, ' ');
+
     let hash = 0;
-    for (let i = 0; i < text.length; i++) {
-      const char = text.charCodeAt(i);
+    for (let i = 0; i < normalized.length; i++) {
+      const char = normalized.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash;
     }
@@ -40,7 +49,13 @@ export default function FeedbackButtons({ question }: FeedbackButtonsProps) {
       const questionHash = hashQuestion(question);
 
       // Store feedback locally first
-      localStorage.setItem(`feedback:${questionHash}`, rating);
+      try {
+        localStorage.setItem(`feedback:${questionHash}`, rating);
+      } catch (storageError) {
+        console.warn('localStorage write failed for feedback:', storageError);
+        // Continue without local storage - not critical
+      }
+
       setSelectedRating(rating);
 
       // Send to Worker API
@@ -75,12 +90,23 @@ export default function FeedbackButtons({ question }: FeedbackButtonsProps) {
 
   // Get or create session ID
   const getSessionId = (): string => {
-    let sessionId = sessionStorage.getItem('bunny-session-id');
-    if (!sessionId) {
-      sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(2)}`;
-      sessionStorage.setItem('bunny-session-id', sessionId);
+    try {
+      let sessionId = sessionStorage.getItem('bunny-session-id');
+      if (!sessionId) {
+        sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(2)}`;
+        try {
+          sessionStorage.setItem('bunny-session-id', sessionId);
+        } catch (storageError) {
+          console.warn('sessionStorage write failed for session ID:', storageError);
+          // Continue with generated ID even if we can't persist it
+        }
+      }
+      return sessionId;
+    } catch (error) {
+      console.warn('sessionStorage not available, generating ephemeral session ID:', error);
+      // Fallback: generate a session ID that won't persist
+      return `session-${Date.now()}-${Math.random().toString(36).substring(2)}`;
     }
-    return sessionId;
   };
 
   return (
@@ -96,7 +122,7 @@ export default function FeedbackButtons({ question }: FeedbackButtonsProps) {
             onClick={() => handleFeedback('helpful')}
             disabled={selectedRating !== null || isSubmitting}
             className={`
-              group relative px-4 py-2 rounded-lg
+              group relative px-6 py-3 rounded-lg
               transition-all duration-300 ease-out
               ${selectedRating === 'helpful'
                 ? 'bg-gradient-to-r from-emerald-500/30 to-green-500/30 border-2 border-emerald-400/50 scale-105'
@@ -131,7 +157,7 @@ export default function FeedbackButtons({ question }: FeedbackButtonsProps) {
             onClick={() => handleFeedback('not-helpful')}
             disabled={selectedRating !== null || isSubmitting}
             className={`
-              group relative px-4 py-2 rounded-lg
+              group relative px-6 py-3 rounded-lg
               transition-all duration-300 ease-out
               ${selectedRating === 'not-helpful'
                 ? 'bg-gradient-to-r from-orange-500/30 to-red-500/30 border-2 border-orange-400/50 scale-105'
