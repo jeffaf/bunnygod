@@ -11,6 +11,8 @@ export interface Env {
   FEEDBACK: KVNamespace; // KV namespace for user feedback
   ANALYTICS?: any; // Analytics Engine binding (optional - requires dashboard setup)
   ENVIRONMENT: string;
+  PHILPAPERS_API_ID?: string; // PhilPapers API ID (optional - falls back to CrossRef)
+  PHILPAPERS_API_KEY?: string; // PhilPapers API Key (optional - falls back to CrossRef)
 }
 
 interface QuestionRequest {
@@ -232,8 +234,11 @@ export default {
       // Extract search terms for PhilPapers
       const searchTerms = extractSearchTerms(sanitizedQuestion);
 
-      // Query PhilPapers for relevant papers
-      const philPapersResult = await searchPhilPapers(searchTerms, 5);
+      // Query PhilPapers for relevant papers (with optional credentials)
+      const philPapersResult = await searchPhilPapers(searchTerms, 5, {
+        apiId: env.PHILPAPERS_API_ID,
+        apiKey: env.PHILPAPERS_API_KEY,
+      });
 
       // Generate answer using Workers AI
       const aiResponse = await synthesizeAnswer(env.AI, sanitizedQuestion, philPapersResult.papers);

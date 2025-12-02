@@ -27,6 +27,8 @@ preview_id = "06b9e3943488472db5b121e787684123"
 # Environment variables
 [vars]
 ENVIRONMENT = "production"
+# PHILPAPERS_API_ID = "" # Optional: PhilPapers API ID (register at https://philpapers.org/help/api.html)
+# PHILPAPERS_API_KEY = "" # Optional: PhilPapers API Key (falls back to CrossRef if not provided)
 
 # Analytics Engine (commented out - requires dashboard setup first)
 # Enable at: https://dash.cloudflare.com/82ac24be7f4bf04dcd76ff97a67c2719/workers/analytics-engine
