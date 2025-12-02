@@ -1,5 +1,6 @@
 import ShareButtons from './phase2/ShareButtons';
 import FeedbackButtons from './phase2/FeedbackButtons';
+import { CitationCard } from './citations';
 
 interface AnswerDisplayProps {
   answer: string;
@@ -8,6 +9,9 @@ interface AnswerDisplayProps {
     title: string;
     authors: string;
     url: string;
+    abstract?: string;
+    year?: number;
+    categories?: string[];
   }>;
 }
 
@@ -47,28 +51,18 @@ export default function AnswerDisplay({ answer, question, sources }: AnswerDispl
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
-              Sources from PhilPapers
+              Academic Sources
             </h4>
-            <ul className="space-y-3">
+
+            <div className="space-y-4">
               {sources.map((source, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cosmic-800/50 flex items-center justify-center text-xs text-cosmic-300">
-                    {index + 1}
-                  </span>
-                  <div className="flex-1">
-                    <a
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-mystic-400 hover:text-mystic-300 transition-colors underline decoration-mystic-500/30 hover:decoration-mystic-400"
-                    >
-                      {source.title}
-                    </a>
-                    <p className="text-cosmic-400/70 text-sm mt-1">{source.authors}</p>
-                  </div>
-                </li>
+                <CitationCard
+                  key={`${source.url}-${index}`}
+                  paper={source}
+                  index={index}
+                />
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </div>

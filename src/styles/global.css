@@ -57,6 +57,66 @@
     text-shadow: 0 0 20px rgba(168, 85, 247, 0.5),
                  0 0 40px rgba(99, 102, 241, 0.3);
   }
+
+  /* Citation expand/collapse animations */
+  .animate-in {
+    animation-fill-mode: both;
+  }
+
+  .slide-in-from-top-2 {
+    animation-name: slideInFromTop;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+    animation-duration: 300ms;
+  }
+
+  @keyframes slideInFromTop {
+    from {
+      transform: translateY(-8px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .scale-98 {
+    transform: scale(0.98);
+  }
+
+  .scale-102 {
+    transform: scale(1.02);
+  }
+
+  .duration-250 {
+    transition-duration: 250ms;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .citation-card,
+  .citation-abstract,
+  .animate-in,
+  .transition-all,
+  .transition-transform {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Custom scrollbar */

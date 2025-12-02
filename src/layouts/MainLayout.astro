@@ -33,10 +33,21 @@ const {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="/og-image.png" />
 
-    <!-- Fonts -->
+    <!-- Fonts - Optimized loading with preconnect and display=swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Preload critical font for immediate text display -->
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <title>{title}</title>
 
@@ -47,7 +58,7 @@ const {
   <body>
     <div class="relative min-h-screen overflow-hidden">
       <!-- Enhanced mystical background with particles -->
-      <MysticalBackground client:load />
+      <MysticalBackground client:idle />
 
       <!-- Main content -->
       <main class="relative z-10">
