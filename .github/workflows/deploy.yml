@@ -80,6 +80,11 @@ jobs:
 
       - name: Deploy Workers
         working-directory: workers/ask
-        run: npx wrangler deploy index.ts
+        run: |
+          # Deploy Worker
+          npx wrangler deploy index.ts
+          # Set PhilPapers API secrets (if not already set)
+          echo "${{ secrets.PHILPAPERS_API_ID }}" | npx wrangler secret put PHILPAPERS_API_ID || echo "Secret already exists or set manually"
+          echo "${{ secrets.PHILPAPERS_API_KEY }}" | npx wrangler secret put PHILPAPERS_API_KEY || echo "Secret already exists or set manually"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
