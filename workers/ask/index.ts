@@ -2,7 +2,8 @@
  * Bunny God API Worker
  *
  * Main Cloudflare Worker that handles philosophical question answering
- * by querying PhilPapers.org and synthesizing answers with Workers AI
+ * by querying scholarly databases (CrossRef, with optional PhilPapers fallback)
+ * and synthesizing answers with Workers AI
  */
 
 export interface Env {

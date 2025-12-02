@@ -74,7 +74,7 @@ export default function LoadingOracle() {
               {MYSTICAL_MESSAGES[messageIndex]}
             </h3>
             <p className="text-cosmic-200 text-sm max-w-md">
-              Bunny God is searching PhilPapers.org and channeling cosmic knowledge through the AI realms
+              Bunny God is searching scholarly databases and channeling cosmic knowledge through the AI realms
             </p>
           </div>
 
