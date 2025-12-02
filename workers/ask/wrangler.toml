@@ -21,8 +21,8 @@ preview_id = "2d81dd2ed12545759bd2a59c38700161"
 # KV namespace for user feedback storage
 [[kv_namespaces]]
 binding = "FEEDBACK"
-id = "PLACEHOLDER_CREATE_VIA_DASHBOARD"
-preview_id = "PLACEHOLDER_CREATE_VIA_DASHBOARD"
+id = "6c82b5c661fc47898f9626770fad8c2e"
+preview_id = "06b9e3943488472db5b121e787684123"
 
 # Environment variables
 [vars]
