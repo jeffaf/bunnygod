@@ -213,8 +213,6 @@ export function detectPhilosophySubfield(question: string): SubfieldDetection {
   // - For questions with 1 match: check if it's a clear winner
   // - For questions with 2+ matches: automatically accept (strong signal)
   // Since we're using absolute match counts as scores, no additional threshold needed for 2+
-  const MIN_MATCHES_FOR_AUTO_ACCEPT = 2;
-
   // If no matches at all, return null
   if (topSubfield.matchCount === 0) {
     return {
