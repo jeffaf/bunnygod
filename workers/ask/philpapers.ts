@@ -116,7 +116,7 @@ async function searchPhilPapersAPI(
  * Search CrossRef API as fallback
  * CrossRef is a general scholarly database with DOI registration
  */
-async function searchCrossRefAPI(
+export async function searchCrossRefAPI(
   query: string,
   limit: number
 ): Promise<PhilPapersSearchResult> {
@@ -126,7 +126,7 @@ async function searchCrossRefAPI(
     const apiUrl = 'https://api.crossref.org/works';
 
     // Add philosophy-related keywords to improve relevance
-    const philosophyQuery = `${query} philosophy ethics moral`;
+    const philosophyQuery = `${query} philosophy`;
 
     // Build search URL
     const searchUrl = new URL(apiUrl);
