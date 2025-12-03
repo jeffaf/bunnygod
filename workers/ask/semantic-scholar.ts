@@ -218,7 +218,9 @@ function normalizeSemanticScholarPaper(paper: SemanticScholarPaper): PhilPaper {
       : '#'),
     year: paper.year,
     categories: paper.fieldsOfStudy,
+    citationCount: paper.citationCount,
   };
+}
 }
 
 /**
