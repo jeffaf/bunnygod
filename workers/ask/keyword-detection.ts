@@ -86,9 +86,9 @@ function fuzzyMatch(keyword: string, word: string): boolean {
     return true;
   }
 
-  // Contains match (for multi-word keywords like "social contract")
+  // Only handle single-word keywords here; multi-word handled elsewhere
   if (keyword.includes(' ')) {
-    return word.includes(keyword.replace(/\s+/g, ''));
+    return false;
   }
 
   // Fuzzy match (Levenshtein distance ≤ 1)
