@@ -10,7 +10,8 @@
 
 import { PhilPaper, PhilPapersSearchResult, searchPhilPapers } from './philpapers';
 import { searchSemanticScholar, PhilosophySubfield } from './semantic-scholar';
-import { detectPhilosophySubfield, getSubfieldSearchTerms } from './keyword-detection';
+import { detectPhilosophySubfield } from './keyword-detection';
+import { getSubfieldSearchTerms } from './subfield-keywords';
 
 /**
  * Search multiple academic sources in parallel and merge results
