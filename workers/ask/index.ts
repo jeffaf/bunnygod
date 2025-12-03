@@ -227,6 +227,7 @@ export default {
 
       // Import modules dynamically
       const { searchPhilPapers, extractSearchTerms } = await import('./philpapers');
+      const { searchMultiSource } = await import('./multi-source');
       const { synthesizeAnswer, sanitizeQuestion } = await import('./ai');
 
       // Sanitize the question
@@ -235,19 +236,16 @@ export default {
       // Extract search terms for PhilPapers
       const searchTerms = extractSearchTerms(sanitizedQuestion);
 
-      // Query PhilPapers for relevant papers (with optional credentials)
-      const philPapersResult = await searchPhilPapers(searchTerms, 5, {
-        apiId: env.PHILPAPERS_API_ID,
-        apiKey: env.PHILPAPERS_API_KEY,
-      });
+      // Query multiple sources for relevant papers (Semantic Scholar + CrossRef)
+      const multiSourceResult = await searchMultiSource(searchTerms, 5);
 
       // Generate answer using Workers AI
-      const aiResponse = await synthesizeAnswer(env.AI, sanitizedQuestion, philPapersResult.papers);
+      const aiResponse = await synthesizeAnswer(env.AI, sanitizedQuestion, multiSourceResult.papers);
 
       // Build response
       const response: AnswerResponse = {
         answer: aiResponse.answer,
-        sources: philPapersResult.papers.map(paper => ({
+        sources: multiSourceResult.papers.map(paper => ({
           title: paper.title,
           authors: paper.authors,
           url: paper.url,
