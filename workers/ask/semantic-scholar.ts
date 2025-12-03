@@ -9,7 +9,7 @@
  * - With API key: 1 request/second (1000 requests per 5 minutes)
  */
 
-import { PhilPaper, PhilPapersSearchResult } from './philpapers';
+import type { PhilosophySubfield, PhilPaper, PhilPapersSearchResult } from './types';
 
 // Semantic Scholar API types
 export interface SemanticScholarPaper {
@@ -36,28 +36,16 @@ export interface SemanticScholarResponse {
   data: SemanticScholarPaper[];
 }
 
-// Philosophy subfield types
-export type PhilosophySubfield =
-  | 'epistemology'
-  | 'metaphysics'
-  | 'ethics'
-  | 'philosophyOfMind'
-  | 'politicalPhilosophy'
-  | 'aesthetics'
-  | 'logic'
-  | 'philosophyOfScience'
-  | 'existentialism';
-
 // Subfield-specific search term mappings
 const SUBFIELD_SEARCH_TERMS: Record<PhilosophySubfield, string[]> = {
   epistemology: ['epistemology', 'knowledge', 'justification'],
   metaphysics: ['metaphysics', 'ontology', 'existence'],
   ethics: ['ethics', 'moral', 'normative'],
-  philosophyOfMind: ['philosophy of mind', 'consciousness', 'mental'],
-  politicalPhilosophy: ['political philosophy', 'justice', 'rights'],
+  'philosophy-of-mind': ['philosophy of mind', 'consciousness', 'mental'],
+  'political-philosophy': ['political philosophy', 'justice', 'rights'],
   aesthetics: ['aesthetics', 'art', 'beauty'],
   logic: ['logic', 'reasoning', 'argument'],
-  philosophyOfScience: ['philosophy of science', 'scientific method'],
+  'philosophy-of-science': ['philosophy of science', 'scientific method'],
   existentialism: ['existentialism', 'meaning', 'freedom'],
 };
 
@@ -220,7 +208,6 @@ function normalizeSemanticScholarPaper(paper: SemanticScholarPaper): PhilPaper {
     categories: paper.fieldsOfStudy,
     citationCount: paper.citationCount,
   };
-}
 }
 
 /**

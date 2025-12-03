@@ -8,9 +8,10 @@
  * Phase 2, Tasks 6-8: Multi-Source Orchestration & Deduplication
  */
 
-import { PhilPaper, PhilPapersSearchResult, searchPhilPapers } from './philpapers';
-import { searchSemanticScholar, PhilosophySubfield } from './semantic-scholar';
-import { detectPhilosophySubfield, getSubfieldSearchTerms } from './keyword-detection';
+import type { PhilPaper, PhilPapersSearchResult, PhilosophySubfield } from './types';
+import { searchPhilPapers } from './philpapers';
+import { searchSemanticScholar } from './semantic-scholar';
+import { detectPhilosophySubfield } from './keyword-detection';
 
 /**
  * Search multiple academic sources in parallel and merge results
