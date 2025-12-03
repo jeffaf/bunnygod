@@ -226,18 +226,15 @@ export default {
       }
 
       // Import modules dynamically
-      const { extractSearchTerms } = await import('./philpapers');
       const { searchMultiSource } = await import('./multi-source');
       const { synthesizeAnswer, sanitizeQuestion } = await import('./ai');
 
       // Sanitize the question
       const sanitizedQuestion = sanitizeQuestion(question);
 
-      // Extract search terms for PhilPapers
-      const searchTerms = extractSearchTerms(sanitizedQuestion);
-
       // Query multiple sources for relevant papers (Semantic Scholar + CrossRef)
-      const multiSourceResult = await searchMultiSource(searchTerms, 5);
+      // Pass the full question - searchMultiSource does its own intelligent keyword detection
+      const multiSourceResult = await searchMultiSource(sanitizedQuestion, 5);
 
       // Generate answer using Workers AI
       const aiResponse = await synthesizeAnswer(env.AI, sanitizedQuestion, multiSourceResult.papers);
