@@ -9,7 +9,8 @@
  * - With API key: 1 request/second (1000 requests per 5 minutes)
  */
 
-import { PhilPaper, PhilPapersSearchResult } from './philpapers';
+import type { PhilPaper, PhilPapersSearchResult, PhilosophySubfield } from './types';
+import { getSubfieldSearchTerms } from './subfield-keywords';
 
 // Semantic Scholar API types
 export interface SemanticScholarPaper {
@@ -35,31 +36,6 @@ export interface SemanticScholarResponse {
   next?: number;
   data: SemanticScholarPaper[];
 }
-
-// Philosophy subfield types
-export type PhilosophySubfield =
-  | 'epistemology'
-  | 'metaphysics'
-  | 'ethics'
-  | 'philosophyOfMind'
-  | 'politicalPhilosophy'
-  | 'aesthetics'
-  | 'logic'
-  | 'philosophyOfScience'
-  | 'existentialism';
-
-// Subfield-specific search term mappings
-const SUBFIELD_SEARCH_TERMS: Record<PhilosophySubfield, string[]> = {
-  epistemology: ['epistemology', 'knowledge', 'justification'],
-  metaphysics: ['metaphysics', 'ontology', 'existence'],
-  ethics: ['ethics', 'moral', 'normative'],
-  philosophyOfMind: ['philosophy of mind', 'consciousness', 'mental'],
-  politicalPhilosophy: ['political philosophy', 'justice', 'rights'],
-  aesthetics: ['aesthetics', 'art', 'beauty'],
-  logic: ['logic', 'reasoning', 'argument'],
-  philosophyOfScience: ['philosophy of science', 'scientific method'],
-  existentialism: ['existentialism', 'meaning', 'freedom'],
-};
 
 // Semantic Scholar API constants
 const SEMANTIC_SCHOLAR_API_BASE = 'https://api.semanticscholar.org/graph/v1';
@@ -194,9 +170,11 @@ export function buildSemanticScholarQuery(
   enhancedQuery += ' philosophy';
 
   // Add subfield-specific terms if provided
-  if (subfield && SUBFIELD_SEARCH_TERMS[subfield]) {
-    const subfieldTerms = SUBFIELD_SEARCH_TERMS[subfield];
-    enhancedQuery += ' ' + subfieldTerms.join(' ');
+  if (subfield) {
+    const subfieldTerms = getSubfieldSearchTerms(subfield);
+    if (subfieldTerms.length > 0) {
+      enhancedQuery += ' ' + subfieldTerms.join(' ');
+    }
   }
 
   return enhancedQuery;
@@ -220,7 +198,6 @@ function normalizeSemanticScholarPaper(paper: SemanticScholarPaper): PhilPaper {
     categories: paper.fieldsOfStudy,
     citationCount: paper.citationCount,
   };
-}
 }
 
 /**

@@ -226,7 +226,7 @@ export default {
       }
 
       // Import modules dynamically
-      const { searchPhilPapers, extractSearchTerms } = await import('./philpapers');
+      const { extractSearchTerms } = await import('./philpapers');
       const { searchMultiSource } = await import('./multi-source');
       const { synthesizeAnswer, sanitizeQuestion } = await import('./ai');
 

@@ -289,7 +289,7 @@ export function detectPhilosophySubfield(question: string): SubfieldDetection {
  * Returns relevant keywords found in the question
  */
 export function extractSearchTerms(
-  question: string,
+  _question: string,
   detection: SubfieldDetection
 ): string[] {
   if (!detection.primarySubfield) {
