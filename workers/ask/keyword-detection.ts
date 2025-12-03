@@ -234,7 +234,7 @@ export function detectPhilosophySubfield(question: string): SubfieldDetection {
     if (secondSubfield.matchCount === 0) {
       return {
         primarySubfield: topSubfield.subfield,
-        confidence: topSubfield.matchCount / 5, // Normalize to 0-1 range
+        confidence: Math.min(1.0, topSubfield.matchCount / 5), // Normalize to 0-1 range
         matchedKeywords: topSubfield.matched,
         allMatches,
       };
