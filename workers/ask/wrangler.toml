@@ -27,6 +27,7 @@ preview_id = "06b9e3943488472db5b121e787684123"
 # Environment variables
 [vars]
 ENVIRONMENT = "production"
+ENABLE_SEMANTIC_SCHOLAR = "false" # Feature flag: Set to "true" to enable Semantic Scholar + CrossRef multi-source
 # PHILPAPERS_API_ID = "" # Optional: PhilPapers API ID (register at https://philpapers.org/help/api.html)
 # PHILPAPERS_API_KEY = "" # Optional: PhilPapers API Key (falls back to CrossRef if not provided)
 

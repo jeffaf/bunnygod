@@ -128,4 +128,5 @@ export interface MultiSourceResult {
     crossref: number | null;
     total: number;
   };
+  detectedSubfield?: PhilosophySubfield;  // Detected philosophy subfield for caching
 }

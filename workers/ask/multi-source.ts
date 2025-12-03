@@ -8,10 +8,10 @@
  * Phase 2, Tasks 6-8: Multi-Source Orchestration & Deduplication
  */
 
-import { PhilPaper, PhilPapersSearchResult, searchPhilPapers } from './philpapers';
-import { searchSemanticScholar, PhilosophySubfield } from './semantic-scholar';
+import type { PhilPaper, PhilPapersSearchResult, MultiSourceResult, PhilosophySubfield } from './types';
+import { searchPhilPapers } from './philpapers';
+import { searchSemanticScholar } from './semantic-scholar';
 import { detectPhilosophySubfield } from './keyword-detection';
-import { getSubfieldSearchTerms } from './subfield-keywords';
 
 /**
  * Search multiple academic sources in parallel and merge results
@@ -29,7 +29,7 @@ import { getSubfieldSearchTerms } from './subfield-keywords';
 export async function searchMultiSource(
   query: string,
   limit: number = 5
-): Promise<PhilPapersSearchResult> {
+): Promise<MultiSourceResult> {
   const startTime = Date.now();
 
   // Step 1: Detect philosophy subfield
@@ -40,12 +40,18 @@ export async function searchMultiSource(
     `🔍 Subfield detection: ${detectedSubfield || 'none'} (confidence: ${detection.confidence.toFixed(2)})`
   );
 
-  // Step 2: Launch parallel queries to both APIs
+  // Step 2: Launch parallel queries to both APIs with timing
+  const semanticStart = Date.now();
+  const crossrefStart = Date.now();
+
   // Use Promise.allSettled to handle failures gracefully
   const [semanticResult, crossrefResult] = await Promise.allSettled([
     searchSemanticScholar(query, limit * 2, detectedSubfield || undefined),
     searchCrossRefAPI(query, limit * 2)
   ]);
+
+  const semanticTime = semanticResult.status === 'fulfilled' ? Date.now() - semanticStart : null;
+  const crossrefTime = crossrefResult.status === 'fulfilled' ? Date.now() - crossrefStart : null;
 
   // Step 3: Collect successful results
   let semanticPapers: PhilPaper[] = [];
@@ -70,8 +76,16 @@ export async function searchMultiSource(
     console.error('❌ Both APIs failed - returning empty results');
     return {
       papers: [],
-      total: 0,
-      source: 'crossref'
+      sources: {
+        semanticScholar: 0,
+        crossref: 0,
+      },
+      timing: {
+        semanticScholar: semanticTime,
+        crossref: crossrefTime,
+        total: Date.now() - startTime,
+      },
+      detectedSubfield: detectedSubfield || undefined,
     };
   }
 
@@ -85,8 +99,16 @@ export async function searchMultiSource(
 
   return {
     papers: mergedPapers,
-    total: semanticPapers.length + crossrefPapers.length,
-    source: 'crossref' // Maintain compatibility with existing code
+    sources: {
+      semanticScholar: semanticPapers.length,
+      crossref: crossrefPapers.length,
+    },
+    timing: {
+      semanticScholar: semanticTime,
+      crossref: crossrefTime,
+      total: totalTime,
+    },
+    detectedSubfield: detectedSubfield || undefined,
   };
 }
 

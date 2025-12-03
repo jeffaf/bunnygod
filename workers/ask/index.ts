@@ -14,6 +14,7 @@ export interface Env {
   ENVIRONMENT: string;
   PHILPAPERS_API_ID?: string; // PhilPapers API ID (optional - falls back to CrossRef)
   PHILPAPERS_API_KEY?: string; // PhilPapers API Key (optional - falls back to CrossRef)
+  ENABLE_SEMANTIC_SCHOLAR?: string; // Feature flag for Semantic Scholar integration (set to "true" to enable)
 }
 
 interface QuestionRequest {
@@ -214,9 +215,10 @@ export default {
       // This ensures "What is love?" and "what is love?" hit the same cache entry
       const normalizedForCache = question.toLowerCase().replace(/\s+/g, ' ');
 
-      // Check cache first
-      const cacheKey = `answer:${hashString(normalizedForCache)}`;
-      const cached = await env.CACHE?.get(cacheKey, 'json');
+      // Build cache key (will include subfield if using semantic scholar)
+      // For now, use base cache key for checking existing cache
+      const baseCacheKey = `answer:${hashString(normalizedForCache)}`;
+      const cached = await env.CACHE?.get(baseCacheKey, 'json');
 
       if (cached) {
         return new Response(
@@ -236,16 +238,29 @@ export default {
       // Extract search terms for PhilPapers
       const searchTerms = extractSearchTerms(sanitizedQuestion);
 
-      // Query multiple sources for relevant papers (Semantic Scholar + CrossRef)
-      const multiSourceResult = await searchMultiSource(searchTerms, 5);
+      // Query sources for relevant papers - use feature flag for safe rollout
+      const useSemanticScholar = env.ENABLE_SEMANTIC_SCHOLAR === 'true';
+
+      const philPapersResult = useSemanticScholar
+        ? await searchMultiSource(searchTerms, 5)
+        : await searchPhilPapers(searchTerms, 5, {
+            apiId: env.PHILPAPERS_API_ID,
+            apiKey: env.PHILPAPERS_API_KEY,
+          });
+
+      // Build cache key including subfield if detected (for Semantic Scholar)
+      let cacheKey = baseCacheKey;
+      if (useSemanticScholar && 'detectedSubfield' in philPapersResult && philPapersResult.detectedSubfield) {
+        cacheKey = `answer:${hashString(normalizedForCache)}:${philPapersResult.detectedSubfield}`;
+      }
 
       // Generate answer using Workers AI
-      const aiResponse = await synthesizeAnswer(env.AI, sanitizedQuestion, multiSourceResult.papers);
+      const aiResponse = await synthesizeAnswer(env.AI, sanitizedQuestion, philPapersResult.papers);
 
       // Build response
       const response: AnswerResponse = {
         answer: aiResponse.answer,
-        sources: multiSourceResult.papers.map(paper => ({
+        sources: philPapersResult.papers.map(paper => ({
           title: paper.title,
           authors: paper.authors,
           url: paper.url,
